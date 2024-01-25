@@ -48,12 +48,20 @@ public class FamilyController {
 	}
 
 	@PutMapping("/update/{id}")
-
-	public String updateFamily(@PathVariable int id, @RequestBody Family family) {
+	public ResponseEntity<Family> updateFamily(@PathVariable int id, @RequestBody Family family) {
+		if (id < 0 || id >= this.families.size())
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		families.set(id, family);
-		return families.toString();
+		Family member = this.families.get(id);
+		return new ResponseEntity<>(member, HttpStatus.OK);
 
 	}
+
+//	public String updateFamily(@PathVariable int id, @RequestBody Family family) {
+//		families.set(id, family);
+//		return families.toString();
+//
+//	}
 
 //	public Family updateFamily(@PathVariable int id, @RequestBody Family family) {
 //		return this.families.set(id,family);
