@@ -1,47 +1,67 @@
 package com.lbg.demo.service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.lbg.demo.Repos.FamilyRepo;
 import com.lbg.demo.domain.Family;
 
 @Service
 public class FamilyService {
-	private List<Family> families = new ArrayList<>();
+	private FamilyRepo repo;
 
-	public List<Family> getFamily() {
-		return families;
+	public FamilyService(FamilyRepo repo) {
+		super();
+		this.repo = repo;
 	}
 
-	public ResponseEntity<Family> createFamily(Family family) {
-		this.families.add(family);
-		Family newFamily = this.families.get(this.families.size() - 1);
-		return new ResponseEntity<>(newFamily, HttpStatus.CREATED);
+	public List<Family> getFamily() {
+		return this.repo.findAll();
 	}
 
 	public ResponseEntity<Family> getFamily(int id) {
-		if (id < 0 || id >= this.families.size())
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		Family member = this.families.get(id);
-		return new ResponseEntity<>(member, HttpStatus.OK);
+		Optional<Family> found = this.repo.findById(id);
+		if (found.isEmpty()) {
+			return new ResponseEntity<Family>(HttpStatus.NOT_FOUND);
+		}
+		Family body = found.get();
+		return ResponseEntity.ok(body);
+
+	}
+
+	public ResponseEntity<Family> createFamily(Family family) {
+
+		Family created = this.repo.save(family);
+		return new ResponseEntity<Family>(created, HttpStatus.CREATED);
 	}
 
 	public ResponseEntity<Family> updateFamily(int id, Family family) {
-		if (id < 0 || id >= this.families.size())
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		families.set(id, family);
-		Family member = this.families.get(id);
-		return new ResponseEntity<>(member, HttpStatus.OK);
+		Optional<Family> found = this.repo.findById(id);
+		if (found.isEmpty()) {
+			return new ResponseEntity<Family>(HttpStatus.NOT_FOUND);
+		}
+		Family existing = found.get();
+		if (family.getName() != null) {
+			existing.setName(family.getName());
+		}
+		if (family.getProfession() != null) {
+			existing.setProfession(family.getProfession());
+		}
+		if (family.getRelation() != null) {
+			existing.setRelation(family.getRelation());
+		}
+		Family updated = this.repo.save(existing);
+		return ResponseEntity.ok(updated);
 
 	}
 
-	public String deleteFamily(int id) {
+	public boolean deleteFamily(int id) {
+		this.repo.deleteById(id);
+		return !this.repo.existsById(id);
 
-		this.families.remove(id);
-		return families.toString();
 	}
 }

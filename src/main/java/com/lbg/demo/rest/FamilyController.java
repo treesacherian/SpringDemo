@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +24,6 @@ public class FamilyController {
 	}
 
 	@GetMapping("/get")
-
 	public List<Family> getFamily() {
 		return this.service.getFamily();
 	}
@@ -39,17 +38,15 @@ public class FamilyController {
 		return this.service.getFamily(id);
 	}
 
-	@PutMapping("/update/{id}")
-
-	public String updateFamily(@PathVariable int id, @RequestBody Family family) {
-		return this.updateFamily(id, family);
+	@PatchMapping("/update/{id}")
+	public ResponseEntity<Family> updateFamily(@PathVariable int id, @RequestBody Family family) {
+		return this.service.updateFamily(id, family);
 
 	}
 
 	@DeleteMapping("/delete/{id}")
+	public boolean deleteFamily(@PathVariable int id) {
 
-	public String deleteFamily(@PathVariable int id) {
-
-		return this.deleteFamily(id);
+		return this.service.deleteFamily(id);
 	}
 }

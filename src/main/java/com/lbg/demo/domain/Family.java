@@ -19,6 +19,14 @@ public class Family {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -45,7 +53,7 @@ public class Family {
 
 	@Override
 	public String toString() {
-		return "Family [name=" + name + ", relation=" + relation + ", profession=" + profession + "]";
+		return "Family id=" + id + " name=" + name + ", relation=" + relation + ", profession=" + profession + "]";
 	}
 
 }
