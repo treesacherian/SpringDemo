@@ -1,29 +1,23 @@
 package com.lbg.demo.domain;
 
-import java.util.Objects;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity
 public class Family {
-	@Override
-	public int hashCode() {
-		return Objects.hash(name, profession, relation);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Family other = (Family) obj;
-		return Objects.equals(name, other.name) && Objects.equals(profession, other.profession)
-				&& Objects.equals(relation, other.relation);
-	}
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 	private String name;
 	private String relation;
 	private String profession;
+
+	public Family() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	public String getName() {
 		return name;
